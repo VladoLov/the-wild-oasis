@@ -13,8 +13,7 @@ import { useBooking } from "../bookings/useBooking";
 import Spinner from "../../ui/Spinner";
 import Checkbox from "../../ui/Checkbox";
 import { useEffect, useState } from "react";
-// Removed the import of format from date-fns
-// import { format } from "date-fns";
+import { format } from "date-fns";
 import { useCheckin } from "./useCheckin";
 
 const Box = styled.div`
@@ -68,10 +67,7 @@ function CheckinBooking() {
           id="confirm"
         >
           I confirm that {guestFullName} has paid the total amount of{" "}
-          {new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-          }).format(totalPrice)}
+          {format(totalPrice)}
         </Checkbox>
       </Box>
 
