@@ -13,7 +13,12 @@ const StyledFilter = styled.div`
   gap: 0.4rem;
 `;
 
-const FilterButton = styled.button`
+// Filter out unwanted props before they reach the DOM
+// eslint-disable-next-line no-unused-vars
+const FilterButton = styled.button.attrs((props) => ({
+  // Remove the `active` prop from the DOM element
+  active: undefined,
+}))`
   background-color: var(--color-grey-0);
   border: none;
 
@@ -41,6 +46,7 @@ function Filter({ filterField, options }) {
   const currentFilter = searchParams.get(filterField) || options.at(0).value;
   function handleClick(value) {
     searchParams.set(filterField, value);
+    if (searchParams.get("page")) searchParams.set("page", 1);
     setSearchParams(searchParams);
   }
 

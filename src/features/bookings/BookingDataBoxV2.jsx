@@ -10,7 +10,6 @@ import {
 
 import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
-
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
 
 const StyledBookingDataBox = styled.section`
@@ -18,7 +17,6 @@ const StyledBookingDataBox = styled.section`
   background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
-
   overflow: hidden;
 `;
 
@@ -69,18 +67,13 @@ const Guest = styled.div`
   }
 `;
 
-// eslint-disable-next-line no-unused-vars
-const Price = styled.div.attrs((props) => ({
-  // Filter out `isPaid` so it does not get passed to the DOM element
-  isPaid: undefined,
-}))`
+const Price = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1.6rem 3.2rem;
   border-radius: var(--border-radius-sm);
   margin-top: 2.4rem;
-
   background-color: ${(props) =>
     props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
   color: ${(props) =>
@@ -120,15 +113,20 @@ function BookingDataBox({ booking }) {
     hasBreakfast,
     observations,
     isPaid,
-    guests: {
-      fullName: guestName = "",
-      email = "",
-      country = "",
-      countryFlag = "",
-      nationalID = "",
-    } = {},
-    cabins: { name: cabinName = "" } = {},
-  } = booking;
+    guests,
+    cabins,
+  } = booking || {};
+
+  const guestName = guests?.fullName || "Unknown Guest";
+  const email = guests?.email || "Unknown Email";
+  const country = guests?.country || "Unknown Country";
+  const countryFlag = guests?.countryFlag;
+  const nationalID = guests?.nationalID || "Unknown ID";
+  const cabinName = cabins?.name || "Unknown Cabin";
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const created = new Date(created_at);
 
   return (
     <StyledBookingDataBox>
@@ -141,11 +139,19 @@ function BookingDataBox({ booking }) {
         </div>
 
         <p>
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
+          {startDate && !isNaN(start)
+            ? format(start, "EEE, MMM dd yyyy")
+            : "Invalid Date"}{" "}
+          (
+          {isToday(start)
             ? "Today"
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+            : startDate && !isNaN(start)
+            ? formatDistanceFromNow(start)
+            : "Unknown"}
+          ) &mdash;{" "}
+          {endDate && !isNaN(end)
+            ? format(end, "EEE, MMM dd yyyy")
+            : "Invalid Date"}
         </p>
       </Header>
 
@@ -189,7 +195,11 @@ function BookingDataBox({ booking }) {
       </Section>
 
       <Footer>
-        <p>Booked {format(new Date(created_at), "EEE, MMM dd yyyy, p")}</p>
+        <p>
+          {created_at && !isNaN(created)
+            ? `Booked ${format(created, "EEE, MMM dd yyyy, p")}`
+            : "Booking date unknown"}
+        </p>
       </Footer>
     </StyledBookingDataBox>
   );
