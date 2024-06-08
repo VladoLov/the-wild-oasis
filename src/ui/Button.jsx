@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import styled, { css } from "styled-components";
+import isPropValid from "@emotion/is-prop-valid";
 
 const sizes = {
   small: css`
@@ -48,7 +49,10 @@ const variations = {
     }
   `,
 };
-const Button = styled.button`
+const Button = styled.button.withConfig({
+  shouldForwardProp: (prop) =>
+    isPropValid(prop) && prop !== "size" && prop !== "variation",
+})`
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);

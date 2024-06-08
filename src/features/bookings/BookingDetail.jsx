@@ -30,6 +30,7 @@ function BookingDetail() {
   const { deleteBooking, isDeleting } = useDeleteBooking();
 
   if (isLoading) return <Spinner />;
+
   if (error) return <div>Error loading booking data</div>;
 
   if (!booking) return <div>No booking data found</div>;

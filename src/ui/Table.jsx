@@ -1,8 +1,11 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext } from "react";
 import styled from "styled-components";
+import isPropValid from "@emotion/is-prop-valid";
 
-const StyledTable = styled.div`
+const StyledTable = styled.div.withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "columns",
+})`
   border: 1px solid var(--color-grey-200);
 
   font-size: 1.4rem;
@@ -11,7 +14,9 @@ const StyledTable = styled.div`
   overflow: hidden;
 `;
 
-const CommonRow = styled.div`
+const CommonRow = styled.div.withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "columns",
+})`
   display: grid;
   grid-template-columns: ${(props) => props.columns};
   column-gap: 2.4rem;
